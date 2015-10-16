@@ -90,5 +90,21 @@ class FirewallPoliciesClient(base.BaseNetworkClient):
         uri = '/fw/firewall_policies'
         return self.list_resources(uri, **filters)
 
-    # TODO(yamamoto): insert_rule
-    # TODO(yamamoto): remove_rule
+    def insert_firewall_rule_in_policy(self, firewall_policy_id,
+                                       firewall_rule_id, insert_after='',
+                                       insert_before=''):
+        uri = '/fw/firewall_policies/%s/insert_rule' % firewall_policy_id
+        data = {
+            'firewall_rule_id': firewall_rule_id,
+            'insert_after': insert_after,
+            'insert_before': insert_before,
+        }
+        return self.update_resource(uri, data)
+
+    def remove_firewall_rule_from_policy(self, firewall_policy_id,
+                                         firewall_rule_id):
+        uri = '/fw/firewall_policies/%s/remove_rule' % firewall_policy_id
+        data = {
+            'firewall_rule_id': firewall_rule_id,
+        }
+        return self.update_resource(uri, data)

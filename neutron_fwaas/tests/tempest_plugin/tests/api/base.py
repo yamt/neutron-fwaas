@@ -13,11 +13,10 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-from tempest.scenario import manager
+from tempest.api.network import base
 
 from neutron_fwaas.tests.tempest_plugin import fwaas_client
 
 
-class FWaaSScenarioTest(fwaas_client.FWaaSClientMixin,
-                        manager.NetworkScenarioTest):
+class BaseFWaaSTest(fwaas_client.FWaaSClientMixin, base.BaseNetworkTest):
     pass
