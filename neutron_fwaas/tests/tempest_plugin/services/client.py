@@ -42,8 +42,7 @@ class _NeutronClientBase(service_client.ServiceClient):
 
     def pluralize(self, resource_name):
         # get plural from map or just add 's'
-        return self.resource_plural_map.get(self.resource_name,
-                                            resource_name + 's')
+        return self.resource_plural_map.get(resource_name, resource_name + 's')
 
     def _lister(self, plural_name):
         def _list(**filters):
