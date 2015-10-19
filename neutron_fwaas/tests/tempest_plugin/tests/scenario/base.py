@@ -45,19 +45,19 @@ class FWaaSScenarioTest(manager.NetworkScenarioTest):
         cls.fw_rules = []
         cls.fw_policies = []
 
-    @classmethod
-    def resource_cleanup(cls):
-        if CONF.service_available.neutron:
-            # Clean up firewall policies
-            for fw_policy in cls.fw_policies:
-                cls._try_delete_resource(
-                    cls.firewall_policies_client.delete_firewall_policy,
-                    fw_policy['id'])
-            # Clean up firewall rules
-            for fw_rule in cls.fw_rules:
-                cls._try_delete_resource(
-                    clis.firewall_rules_client.delete_firewall_rule,
-                    fw_rule['id'])
+#    @classmethod
+#    def resource_cleanup(cls):
+#        if CONF.service_available.neutron:
+#            # Clean up firewall policies
+#            for fw_policy in cls.fw_policies:
+#                cls._try_delete_resource(
+#                    cls.firewall_policies_client.delete_firewall_policy,
+#                    fw_policy['id'])
+#            # Clean up firewall rules
+#            for fw_rule in cls.fw_rules:
+#                cls._try_delete_resource(
+#                    clis.firewall_rules_client.delete_firewall_rule,
+#                    fw_rule['id'])
 
     @classmethod
     def create_firewall_rule(cls, action, protocol):
