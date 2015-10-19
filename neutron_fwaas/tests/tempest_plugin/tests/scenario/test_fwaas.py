@@ -47,7 +47,7 @@ class TestFWaaS(base.FWaaSScenarioTest):
         return server, keys
 
     def _server_ip(self, server, network):
-        return server['addresses'][network['name']][0]
+        return server['addresses'][network['name']][0]['addr']
 
     @test.idempotent_id('f970f6b3-6541-47ac-a9ea-f769be1e21a8')
     def test_firewall(self):
@@ -61,7 +61,6 @@ class TestFWaaS(base.FWaaSScenarioTest):
 
         server1, keys1 = self._create_server(network1)
         server2, keys2 = self._create_server(network2)
-        self.assertEqual({}, server1)
         access_point = self._ssh_to_server(self._server_ip(server1, network1),
                                            keys1['private_key'])
         self.assertEqual([], server2)
