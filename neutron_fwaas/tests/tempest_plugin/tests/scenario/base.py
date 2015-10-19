@@ -16,7 +16,7 @@ class FWaaSScenarioTest(manager.NetworkScenarioTest):
 
     @classmethod
     def resource_setup(cls):
-        super(TestFWaaS, cls).resource_setup()
+        super(FWaaSScenarioTest, cls).resource_setup()
         cls.fwaas_client = client.NeutronFWaaSClient(
             self.auth_provider,
             CONF.network.catalog_type,
