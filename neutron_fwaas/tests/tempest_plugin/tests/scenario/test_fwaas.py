@@ -70,7 +70,7 @@ class TestFWaaS(base.FWaaSScenarioTest):
                                    should_connect=True)
 
         fw_rule = self.create_firewall_rule(
-            destination_ip_address=server2_ip,
+            source_ip_address=server1_ip,
             action="deny")
         fw_policy = self.create_firewall_policy(firewall_rules=[fw_rule['id']])
         fw = self.create_firewall(firewall_policy_id=fw_policy['id'])
