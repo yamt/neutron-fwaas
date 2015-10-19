@@ -61,6 +61,6 @@ class FWaaSScenarioTest(manager.NetworkScenarioTest):
             name=data_utils.rand_name("fw-policy"))
         fw_policy = body['firewall_policy']
         self.addCleanup(self.delete_wrapper,
-                        self.firewall_firewalls_client.delete_firewall_policy,
+                        self.firewall_policies_client.delete_firewall_policy,
                         fw_policy['id'])
         return fw_policy
