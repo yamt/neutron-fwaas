@@ -17,14 +17,15 @@ class FWaaSScenarioTest(manager.NetworkScenarioTest):
     @classmethod
     def resource_setup(cls):
         super(FWaaSScenarioTest, cls).resource_setup()
+        manager = cls.manager
         cls.fwaas_client = client.NeutronFWaaSClient(
-            self.auth_provider,
+            manager.auth_provider,
             CONF.network.catalog_type,
             CONF.network.region or CONF.identity.region,
             endpoint_type=CONF.network.endpoint_type,
             build_interval=CONF.network.build_interval,
             build_timeout=CONF.network.build_timeout,
-            **self.default_params)
+            **manager.default_params)
         cls.fw_rules = []
         cls.fw_policies = []
 
