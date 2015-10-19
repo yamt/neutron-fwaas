@@ -62,10 +62,14 @@ class TestFWaaS(base.FWaaSScenarioTest):
         network2, subnet2, router2 = self.create_networks()
         self.assertEqual(router1['external_gateway_info']['network_id'],
                          router2['external_gateway_info']['network_id'])
+        self.assertEqual(router1, router2)
 
         server1, keys1 = self._create_server(network1)
+        public_network_id = CONF.network.public_network_id
         server2, keys2 = self._create_server(network2)
-        access_point = self._ssh_to_server(self._server_ip(server1, network1),
-                                           keys1['private_key'])
+        floating_ip = self.create_floating_ip(server1, public_network_id)
+        # server1_ip = self._server_ip(server1, network1)
+        server1_ip = floating_ip
+        access_point = self._ssh_to_server(server1_ip, keys1['private_key'])
         self.assertEqual([], server2)
         self._check_remote_connectivity(access_point, ip, True)
