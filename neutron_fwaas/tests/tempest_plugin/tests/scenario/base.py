@@ -57,24 +57,32 @@ class FWaaSScenarioTest(manager.NetworkScenarioTest):
             build_timeout=CONF.network.build_timeout,
             **manager.default_params)
 
-    def create_firewall_rule(self, action, protocol):
-        """Wrapper utility that returns a test firewall rule."""
+    def create_firewall_rule(self, **kwargs):
         body = self.firewall_rules_client.create_firewall_rule(
             name=data_utils.rand_name("fw-rule"),
-            action=action,
-            protocol=protocol)
+            **kwargs)
         fw_rule = body['firewall_rule']
         self.addCleanup(self.delete_wrapper,
                         self.firewall_rules_client.delete_firewall_rule,
                         fw_rule['id'])
         return fw_rule
 
-    def create_firewall_policy(self):
-        """Wrapper utility that returns a test firewall policy."""
+    def create_firewall_policy(self, **kwargs):
         body = self.firewall_policies_client.create_firewall_policy(
-            name=data_utils.rand_name("fw-policy"))
+            name=data_utils.rand_name("fw-policy"),
+            **kwargs)
         fw_policy = body['firewall_policy']
         self.addCleanup(self.delete_wrapper,
                         self.firewall_policies_client.delete_firewall_policy,
                         fw_policy['id'])
         return fw_policy
+
+    def create_firewall(self, **kwargs):
+        body = self.firewalls_client.create_firewall(
+            name=data_utils.rand_name("fw"),
+            **kwargs)
+        fw = body['firewall']
+        self.addCleanup(self.delete_wrapper,
+                        self.firewalls_client.delete_firewall,
+                        fw['id'])
+        return fw

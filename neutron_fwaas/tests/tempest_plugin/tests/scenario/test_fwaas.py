@@ -37,7 +37,7 @@ class TestFWaaS(base.FWaaSScenarioTest):
 
     @test.idempotent_id('1b84cf01-9c09-4ce7-bc72-b15e39076468')
     def test_firewall(self):
-        fw_rule = self.create_firewall_rule("allow", "tcp")
-        fw_policy = self.create_firewall_policy()
+        fw_rule = self.create_firewall_rule(protocol="tcp", action="allow")
+        fw_policy = self.create_firewall_policy(firewall_rules=[fw_rule['id']])
         network, subnet, router = self.create_networks()
         network, subnet, router = self.create_networks()
