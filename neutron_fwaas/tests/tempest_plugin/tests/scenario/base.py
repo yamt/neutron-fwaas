@@ -18,7 +18,23 @@ class FWaaSScenarioTest(manager.NetworkScenarioTest):
     def resource_setup(cls):
         super(FWaaSScenarioTest, cls).resource_setup()
         manager = cls.manager
-        cls.fwaas_client = client.NeutronFWaaSClient(
+        cls.firewalls_client = client.FirewallsClient(
+            manager.auth_provider,
+            CONF.network.catalog_type,
+            CONF.network.region or CONF.identity.region,
+            endpoint_type=CONF.network.endpoint_type,
+            build_interval=CONF.network.build_interval,
+            build_timeout=CONF.network.build_timeout,
+            **manager.default_params)
+        cls.firewall_policies_client = client.FirewallPoliciesClient(
+            manager.auth_provider,
+            CONF.network.catalog_type,
+            CONF.network.region or CONF.identity.region,
+            endpoint_type=CONF.network.endpoint_type,
+            build_interval=CONF.network.build_interval,
+            build_timeout=CONF.network.build_timeout,
+            **manager.default_params)
+        cls.firewall_rules_client = client.FirewallRulesClient(
             manager.auth_provider,
             CONF.network.catalog_type,
             CONF.network.region or CONF.identity.region,
@@ -32,20 +48,21 @@ class FWaaSScenarioTest(manager.NetworkScenarioTest):
     @classmethod
     def resource_cleanup(cls):
         if CONF.service_available.neutron:
-            client = cls.fwaas_client
             # Clean up firewall policies
             for fw_policy in cls.fw_policies:
-                cls._try_delete_resource(client.delete_firewall_policy,
-                                         fw_policy['id'])
+                cls._try_delete_resource(
+                    cls.firewall_policies_client.delete_firewall_policy,
+                    fw_policy['id'])
             # Clean up firewall rules
             for fw_rule in cls.fw_rules:
-                cls._try_delete_resource(client.delete_firewall_rule,
-                                         fw_rule['id'])
+                cls._try_delete_resource(
+                    clis.firewall_rules_client.delete_firewall_rule,
+                    fw_rule['id'])
 
     @classmethod
     def create_firewall_rule(cls, action, protocol):
         """Wrapper utility that returns a test firewall rule."""
-        body = cls.fwaas_client.create_firewall_rule(
+        body = cls.firewall_rules_client.create_firewall_rule(
             name=data_utils.rand_name("fw-rule"),
             action=action,
             protocol=protocol)
@@ -56,7 +73,7 @@ class FWaaSScenarioTest(manager.NetworkScenarioTest):
     @classmethod
     def create_firewall_policy(cls):
         """Wrapper utility that returns a test firewall policy."""
-        body = cls.fwaas_client.create_firewall_policy(
+        body = cls.firewall_policies_client.create_firewall_policy(
             name=data_utils.rand_name("fw-policy"))
         fw_policy = body['firewall_policy']
         cls.fw_policies.append(fw_policy)
