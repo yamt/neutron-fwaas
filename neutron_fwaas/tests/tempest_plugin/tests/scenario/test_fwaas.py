@@ -42,7 +42,7 @@ class TestFWaaS(base.FWaaSScenarioTest):
 
         network1, subnet1, router1 = self.create_networks()
         network2, subnet2, router2 = self.create_networks()
-        self.aasertEqual(router1, router2)
+        self.assertEqual(router1, router2)
 
         access_point = self._ssh_to_server(server, key)
         self._check_remote_connectivity(access_point, ip, should_succeed)
