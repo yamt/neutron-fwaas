@@ -69,6 +69,7 @@ class TestFWaaS(base.FWaaSScenarioTest):
         floating_ip = self.create_floating_ip(server1, public_network_id)
         # server1_ip = self._server_ip(server1, network1)
         server1_ip = floating_ip.floating_ip_address
-        access_point = self._ssh_to_server(server1_ip, keys1['private_key'])
+        server1_ssh = self._ssh_to_server(server1_ip, keys1['private_key'])
         #self.assertEqual([], server2)
-        self._check_remote_connectivity(access_point, ip, True)
+        server2_ip = self._server_ip(server2, network2)
+        self._check_remote_connectivity(server1_ssh, server2_ip, True)
