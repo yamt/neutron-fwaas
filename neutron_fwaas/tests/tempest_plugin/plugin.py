@@ -2,10 +2,10 @@
 import os
 import sys
 
-from tempest.test_discover import plugin
+from tempest.test_discover import plugins
 
 
-class NeutronFWaaSPlugin(plugin.TempestPlugin):
+class NeutronFWaaSPlugin(plugins.TempestPlugin):
     def get_opt_lists(self):
         return []
 
