@@ -55,8 +55,7 @@ class FWaaSScenarioTest(manager.NetworkScenarioTest):
                         fw_rule['id'])
         return fw_rule
 
-    @classmethod
-    def create_firewall_policy(cls):
+    def create_firewall_policy(self):
         """Wrapper utility that returns a test firewall policy."""
         body = self.firewall_policies_client.create_firewall_policy(
             name=data_utils.rand_name("fw-policy"))
