@@ -35,17 +35,16 @@ class TestFWaaS(base.FWaaSScenarioTest):
             msg = "FWaaS Extension not enabled."
             raise cls.skipException(msg)
 
-    def _create_server(self, network):
+    def _create_server(self, network, security_group=None):
         keys = self.create_keypair()
         kwargs = {
             'networks': [
                 {'uuid': network['id']},
             ],
             'key_name': keys['name'],
-            'security_groups': [
-                {'name': self.security_group['name']},
-            ]
         }
+        if security_group is not None:
+            kwargs['security_groups] = {'name': self.security_group['name']}
         server = self.create_server(create_kwargs=kwargs)
         return server, keys
 
@@ -54,25 +53,27 @@ class TestFWaaS(base.FWaaSScenarioTest):
 
     @test.idempotent_id('f970f6b3-6541-47ac-a9ea-f769be1e21a8')
     def test_firewall(self):
-        self.security_group = self._create_security_group()
-        network1, subnet1, router1 = self.create_networks()
-        network2, subnet2, router2 = self.create_networks()
-        self.assertEqual(router1['external_gateway_info']['network_id'],
-                         router2['external_gateway_info']['network_id'])
-
-        server1, keys1 = self._create_server(network1)
+        ssh_login = CONF.compute.image_ssh_user
         public_network_id = CONF.network.public_network_id
-        server2, keys2 = self._create_server(network2)
-        floating_ip = self.create_floating_ip(server1, public_network_id)
-        server1_ip = floating_ip.floating_ip_address
-        server1_ssh = self._ssh_to_server(server1_ip, keys1['private_key'])
-        server2_ip = self._server_ip(server2, network2)
 
-        self._check_remote_connectivity(server1_ssh, server2_ip, True)
+        network1, subnet1, router1 = self.create_networks()
+        security_group = self._create_security_group()
+        server1, keys1 = self._create_server(network1,
+                                             security_group=security_group)
+        private_key = keys1['private_key']
+        server1_floating_ip = self.create_floating_ip(server1,
+                                                      public_network_id)
+        server1_ip = floating_ip.server1_floating_ip_address
+
+        self.check_vm_connectivity(server1_ip, username=ssh_login,
+                                   private_key=private_key,
+                                   should_connect=True)
 
         fw_rule = self.create_firewall_rule(
             destination_ip_address=server2_ip,
             action="deny")
         fw_policy = self.create_firewall_policy(firewall_rules=[fw_rule['id']])
         fw = self.create_firewall(firewall_policy_id=fw_policy['id'])
-        self._check_remote_connectivity(server1_ssh, server2_ip, False)
+        self.check_vm_connectivity(server1_ip, username=ssh_login,
+                                   private_key=private_key,
+                                   should_connect=False)
