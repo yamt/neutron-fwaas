@@ -35,6 +35,17 @@ class TestFWaaS(base.FWaaSScenarioTest):
             msg = "FWaaS Extension not enabled."
             raise cls.skipException(msg)
 
+    def _create_server(self, network):
+        keys = self.create_keypair()
+        kwargs = {
+            'networks': [
+                {'uuid': network['id']},
+            ],
+            'key_name': keys['name'],
+        }
+        server = self.create_server(create_kwargs=kwargs)
+        return server, keys
+
     @test.idempotent_id('f970f6b3-6541-47ac-a9ea-f769be1e21a8')
     def test_firewall(self):
         fw_rule = self.create_firewall_rule(protocol="tcp", action="allow")
@@ -42,7 +53,11 @@ class TestFWaaS(base.FWaaSScenarioTest):
 
         network1, subnet1, router1 = self.create_networks()
         network2, subnet2, router2 = self.create_networks()
-        self.assertEqual(router1, router2)
+        self.assertEqual(router1['external_gateway_info']['network_id'],
+                         router2['external_gateway_info']['network_id'])
 
-        access_point = self._ssh_to_server(server, key)
-        self._check_remote_connectivity(access_point, ip, should_succeed)
+        server1, keys1 = self._create_server(network1)
+        server2, keys2 = self._create_server(network2)
+        access_point = self._ssh_to_server(server1, keys1['private_key'])
+        self.assertEqual([], server2)
+        self._check_remote_connectivity(access_point, ip, True)
