@@ -63,7 +63,7 @@ class TestFWaaS(base.FWaaSScenarioTest):
         private_key = keys1['private_key']
         server1_floating_ip = self.create_floating_ip(server1,
                                                       public_network_id)
-        server1_ip = floating_ip.server1_floating_ip_address
+        server1_ip = server1_floating_ip.floating_ip_address
 
         self.check_vm_connectivity(server1_ip, username=ssh_login,
                                    private_key=private_key,
@@ -77,3 +77,8 @@ class TestFWaaS(base.FWaaSScenarioTest):
         self.check_vm_connectivity(server1_ip, username=ssh_login,
                                    private_key=private_key,
                                    should_connect=False)
+
+        self.firewalls_client.delete_firewall(fw['id'])
+        self.check_vm_connectivity(server1_ip, username=ssh_login,
+                                   private_key=private_key,
+                                   should_connect=True)
