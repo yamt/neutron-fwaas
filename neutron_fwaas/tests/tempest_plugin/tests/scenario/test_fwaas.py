@@ -44,7 +44,7 @@ class TestFWaaS(base.FWaaSScenarioTest):
             'key_name': keys['name'],
         }
         if security_group is not None:
-            kwargs['security_groups] = {'name': self.security_group['name']}
+            kwargs['security_groups'] = [{'name': security_group['name']}]
         server = self.create_server(create_kwargs=kwargs)
         return server, keys
 
