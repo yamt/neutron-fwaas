@@ -7,10 +7,12 @@ from tempest import config
 from tempest.scenario import manager
 from tempest import test
 
+from neutron_fwaas.tests.tempest_plugin.tests.scenario import base
+
 CONF = config.CONF
 
 
-class TestFWaaS(manager.NetworkScenarioTest):
+class TestFWaaS(base.FWaaSScenarioTest):
 
     @classmethod
     def resource_setup(cls):
