@@ -64,4 +64,5 @@ class TestFWaaS(base.BaseNetworkTest):
 
     @test.idempotent_id('1b84cf01-9c09-4ce7-bc72-b15e39076468')
     def test_firewall(self):
-        pass
+        network, subnet, router = self.create_networks()
+        network, subnet, router = self.create_networks()
