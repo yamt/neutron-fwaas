@@ -89,3 +89,6 @@ class FirewallPoliciesClient(base.BaseNetworkClient):
     def list_firewall_policies(self, **filters):
         uri = '/fw/firewall_policies'
         return self.list_resources(uri, **filters)
+
+    # TODO(yamamoto): insert_rule
+    # TODO(yamamoto): remove_rule
