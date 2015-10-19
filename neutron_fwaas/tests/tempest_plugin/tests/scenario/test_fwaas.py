@@ -74,5 +74,5 @@ class TestFWaaS(base.FWaaSScenarioTest):
             destination_ip_address=server2_ip,
             action="deny")
         fw_policy = self.create_firewall_policy(firewall_rules=[fw_rule['id']])
-        fw = self.create_firewall(firewall_policy=fw_policy['id'])
+        fw = self.create_firewall(firewall_policy_id=fw_policy['id'])
         self._check_remote_connectivity(server1_ssh, server2_ip, False)
