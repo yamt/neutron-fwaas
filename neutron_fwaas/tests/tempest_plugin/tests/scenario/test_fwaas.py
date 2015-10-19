@@ -54,9 +54,6 @@ class TestFWaaS(base.FWaaSScenarioTest):
 
     @test.idempotent_id('f970f6b3-6541-47ac-a9ea-f769be1e21a8')
     def test_firewall(self):
-#        fw_rule = self.create_firewall_rule(protocol="tcp", action="allow")
-#        fw_policy = self.create_firewall_policy(firewall_rules=[fw_rule['id']])
-
         self.security_group = self._create_security_group()
         network1, subnet1, router1 = self.create_networks()
         network2, subnet2, router2 = self.create_networks()
@@ -67,9 +64,15 @@ class TestFWaaS(base.FWaaSScenarioTest):
         public_network_id = CONF.network.public_network_id
         server2, keys2 = self._create_server(network2)
         floating_ip = self.create_floating_ip(server1, public_network_id)
-        # server1_ip = self._server_ip(server1, network1)
         server1_ip = floating_ip.floating_ip_address
         server1_ssh = self._ssh_to_server(server1_ip, keys1['private_key'])
-        #self.assertEqual([], server2)
         server2_ip = self._server_ip(server2, network2)
+
         self._check_remote_connectivity(server1_ssh, server2_ip, True)
+
+        fw_rule = self.create_firewall_rule(
+            destination_ip_address=server2_ip,
+            action="deny")
+        fw_policy = self.create_firewall_policy(firewall_rules=[fw_rule['id']])
+        fw = self.create_firewall(firewall_policy=fw_policy['id'])
+        self._check_remote_connectivity(server1_ssh, server2_ip, False)
