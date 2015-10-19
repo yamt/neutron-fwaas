@@ -62,7 +62,6 @@ class TestFWaaS(base.FWaaSScenarioTest):
         network2, subnet2, router2 = self.create_networks()
         self.assertEqual(router1['external_gateway_info']['network_id'],
                          router2['external_gateway_info']['network_id'])
-        self.assertEqual(router1, router2)
 
         server1, keys1 = self._create_server(network1)
         public_network_id = CONF.network.public_network_id
