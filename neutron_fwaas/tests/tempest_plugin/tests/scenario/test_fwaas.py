@@ -42,6 +42,9 @@ class TestFWaaS(base.FWaaSScenarioTest):
                 {'uuid': network['id']},
             ],
             'key_name': keys['name'],
+            'security_groups': [
+                {'name': self.security_group['name']},
+            ]
         }
         server = self.create_server(create_kwargs=kwargs)
         return server, keys
@@ -51,9 +54,10 @@ class TestFWaaS(base.FWaaSScenarioTest):
 
     @test.idempotent_id('f970f6b3-6541-47ac-a9ea-f769be1e21a8')
     def test_firewall(self):
-        fw_rule = self.create_firewall_rule(protocol="tcp", action="allow")
-        fw_policy = self.create_firewall_policy(firewall_rules=[fw_rule['id']])
+#        fw_rule = self.create_firewall_rule(protocol="tcp", action="allow")
+#        fw_policy = self.create_firewall_policy(firewall_rules=[fw_rule['id']])
 
+        self.security_group = self._create_security_group()
         network1, subnet1, router1 = self.create_networks()
         network2, subnet2, router2 = self.create_networks()
         self.assertEqual(router1['external_gateway_info']['network_id'],
