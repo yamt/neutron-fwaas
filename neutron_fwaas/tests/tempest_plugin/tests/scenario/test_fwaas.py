@@ -35,7 +35,7 @@ class TestFWaaS(base.FWaaSScenarioTest):
             msg = "FWaaS Extension not enabled."
             raise cls.skipException(msg)
 
-    @test.idempotent_id('94d8faf5e74ff28f3f64fcc1d0ea201b4ba1ba2d')
+    @test.idempotent_id('f970f6b3-6541-47ac-a9ea-f769be1e21a8')
     def test_firewall(self):
         fw_rule = self.create_firewall_rule(protocol="tcp", action="allow")
         fw_policy = self.create_firewall_policy(firewall_rules=[fw_rule['id']])
