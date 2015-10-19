@@ -42,39 +42,26 @@ class FWaaSScenarioTest(manager.NetworkScenarioTest):
             build_interval=CONF.network.build_interval,
             build_timeout=CONF.network.build_timeout,
             **manager.default_params)
-        cls.fw_rules = []
-        cls.fw_policies = []
 
-#    @classmethod
-#    def resource_cleanup(cls):
-#        if CONF.service_available.neutron:
-#            # Clean up firewall policies
-#            for fw_policy in cls.fw_policies:
-#                cls._try_delete_resource(
-#                    cls.firewall_policies_client.delete_firewall_policy,
-#                    fw_policy['id'])
-#            # Clean up firewall rules
-#            for fw_rule in cls.fw_rules:
-#                cls._try_delete_resource(
-#                    clis.firewall_rules_client.delete_firewall_rule,
-#                    fw_rule['id'])
-
-    @classmethod
-    def create_firewall_rule(cls, action, protocol):
+    def create_firewall_rule(self, action, protocol):
         """Wrapper utility that returns a test firewall rule."""
-        body = cls.firewall_rules_client.create_firewall_rule(
+        body = self.firewall_rules_client.create_firewall_rule(
             name=data_utils.rand_name("fw-rule"),
             action=action,
             protocol=protocol)
         fw_rule = body['firewall_rule']
-        cls.fw_rules.append(fw_rule)
+        self.addCleanup(self.delete_wrapper,
+                        self.firewall_rules_client.delete_firewall_rule,
+                        fw_rule['id'])
         return fw_rule
 
     @classmethod
     def create_firewall_policy(cls):
         """Wrapper utility that returns a test firewall policy."""
-        body = cls.firewall_policies_client.create_firewall_policy(
+        body = self.firewall_policies_client.create_firewall_policy(
             name=data_utils.rand_name("fw-policy"))
         fw_policy = body['firewall_policy']
-        cls.fw_policies.append(fw_policy)
+        self.addCleanup(self.delete_wrapper,
+                        self.firewall_firewalls_client.delete_firewall_policy,
+                        fw_policy['id'])
         return fw_policy
