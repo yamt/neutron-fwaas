@@ -35,9 +35,14 @@ class TestFWaaS(base.FWaaSScenarioTest):
             msg = "FWaaS Extension not enabled."
             raise cls.skipException(msg)
 
-    @test.idempotent_id('1b84cf01-9c09-4ce7-bc72-b15e39076468')
+    @test.idempotent_id('94d8faf5e74ff28f3f64fcc1d0ea201b4ba1ba2d')
     def test_firewall(self):
         fw_rule = self.create_firewall_rule(protocol="tcp", action="allow")
         fw_policy = self.create_firewall_policy(firewall_rules=[fw_rule['id']])
-        network, subnet, router = self.create_networks()
-        network, subnet, router = self.create_networks()
+
+        network1, subnet1, router1 = self.create_networks()
+        network2, subnet2, router2 = self.create_networks()
+        self.aasertEqual(router1, router2)
+
+        access_point = self._ssh_to_server(server, key)
+        self._check_remote_connectivity(access_point, ip, should_succeed)
