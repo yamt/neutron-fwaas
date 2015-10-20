@@ -6,6 +6,8 @@ NEUTRON_DIR="$BASE/new/neutron-fwaas"
 TEMPEST_DIR="$BASE/new/tempest"
 SCRIPTS_DIR="/usr/os-testr-env/bin"
 
+FWAAS_TEST=$1
+
 function generate_testr_results {
     # Give job user rights to access tox logs
     sudo -H -u $owner chmod o+rw .
@@ -35,11 +37,28 @@ sudo chown -R $owner:stack $NEUTRON_DIR
 $prep_func
 
 # Run tests
-echo "Running neutron dsvm-functional test suite"
-set +e
-sudo -H -u $owner tox -e dsvm-functional
-testr_exit_code=$?
-set -e
+
+case "$FWAAS_TEST" in
+    dsvm-functional)
+        echo "Running neutron dsvm-functional test suite"
+        set +e
+        sudo -H -u $owner tox -e dsvm-functional
+        testr_exit_code=$?
+        set -e
+        ;;
+    scenario)
+        echo "Running neutron-fwaas scenario tests"
+        set +e
+        cd "$TEMPEST_DIR"
+        sudo -H -u $owner tox -e all-plugin "^neutron_fwaas"
+        testr_exit_code=$?
+        set -e
+        ;;
+    *)
+        echo "ERROR: unsupported test: $FWAAS_TEST"
+        exit 1
+        ;;
+esac
 
 # Collect and parse results
 generate_testr_results
