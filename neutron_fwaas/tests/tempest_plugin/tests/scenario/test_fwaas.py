@@ -93,6 +93,6 @@ class TestFWaaS(base.FWaaSScenarioTest):
         fw = self.create_firewall(firewall_policy_id=fw_policy['id'])
         return fw
 
-    @test.idempotent_id('f970f6b3-6541-47ac-a9ea-f769be1e21a8')
+    @test.idempotent_id('b985d010-994a-4055-bd5c-9e961464ccde')
     def test_firewall_basic_icmp(self):
         self._test_firewall_basic(self, self._block_icmp)
