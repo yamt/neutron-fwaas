@@ -73,7 +73,7 @@ class TestFWaaS(base.FWaaSScenarioTest):
                                    private_key=private_key,
                                    should_connect=True)
 
-    def _block(self, server1_ip):
+    def _block_ip(self, server1_ip):
         fw_rule = self.create_firewall_rule(
             source_ip_address=server1_ip,
             action="deny")
@@ -83,4 +83,16 @@ class TestFWaaS(base.FWaaSScenarioTest):
 
     @test.idempotent_id('f970f6b3-6541-47ac-a9ea-f769be1e21a8')
     def test_firewall_basic(self):
-        self._test_firewall_basic(self, self._block_tcp)
+        self._test_firewall_basic(self, self._block_ip)
+
+    def _block_icmp(self, server1_ip):
+        fw_rule = self.create_firewall_rule(
+            protocol="icmp",
+            action="deny")
+        fw_policy = self.create_firewall_policy(firewall_rules=[fw_rule['id']])
+        fw = self.create_firewall(firewall_policy_id=fw_policy['id'])
+        return fw
+
+    @test.idempotent_id('f970f6b3-6541-47ac-a9ea-f769be1e21a8')
+    def test_firewall_basic_icmp(self):
+        self._test_firewall_basic(self, self._block_icmp)
