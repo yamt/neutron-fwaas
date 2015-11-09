@@ -29,7 +29,7 @@ class NeutronFWaaSPlugin(plugins.TempestPlugin):
         d = os.path.split(d)[0]
         top_level_dir = os.path.split(d)[0]
         test_dir = os.path.join(top_level_dir,
-            'neutron_fwaas/tests/tempest_plugin/tests/scenario')
+            'neutron_fwaas/tests/tempest_plugin/tests')
         return (test_dir, top_level_dir)
 
     def register_opts(self):
