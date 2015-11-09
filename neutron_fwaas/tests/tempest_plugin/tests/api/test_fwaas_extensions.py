@@ -25,7 +25,7 @@ from neutron_fwaas.tests.tempest_plugin.tests.api import base
 CONF = config.CONF
 
 
-class FWaaSExtensionTestJSON(base.BaseNetworkTest):
+class FWaaSExtensionTestJSON(base.BaseFWaaSTest):
 
     """
     Tests the following operations in the Neutron API using the REST client for
