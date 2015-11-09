@@ -60,6 +60,7 @@ class FWaaSExtensionTestJSON(base.BaseFWaaSTest):
             raise cls.skipException(msg)
 
     def setUp(self):
+        super(FWaaSExtensionTestJSON, self).setUp()
         self.fw_rule = self.create_firewall_rule(action="allow",
                                                  protocol="tcp")
         self.fw_policy = self.create_firewall_policy()
