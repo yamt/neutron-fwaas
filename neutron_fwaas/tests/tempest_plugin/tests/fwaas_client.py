@@ -58,7 +58,7 @@ class FWaaSClientMixin(object):
             name=data_utils.rand_name("fw-rule"),
             **kwargs)
         fw_rule = body['firewall_rule']
-        self.addCleanup(self.delete_wrapper,
+        self.addCleanup(self._delete_wrapper,
                         self.firewall_rules_client.delete_firewall_rule,
                         fw_rule['id'])
         return fw_rule
@@ -68,7 +68,7 @@ class FWaaSClientMixin(object):
             name=data_utils.rand_name("fw-policy"),
             **kwargs)
         fw_policy = body['firewall_policy']
-        self.addCleanup(self.delete_wrapper,
+        self.addCleanup(self._delete_wrapper,
                         self.firewall_policies_client.delete_firewall_policy,
                         fw_policy['id'])
         return fw_policy
@@ -78,7 +78,7 @@ class FWaaSClientMixin(object):
             name=data_utils.rand_name("fw"),
             **kwargs)
         fw = body['firewall']
-        self.addCleanup(self.delete_wrapper,
+        self.addCleanup(self._delete_wrapper,
                         self.firewalls_client.delete_firewall,
                         fw['id'])
         return fw

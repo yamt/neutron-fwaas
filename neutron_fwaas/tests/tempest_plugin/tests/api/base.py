@@ -19,4 +19,4 @@ from neutron_fwaas.tests.tempest_plugin.tests import fwaas_client
 
 
 class BaseFWaaSTest(fwaas_client.FWaaSClientMixin, base.BaseNetworkTest):
-    pass
+    _delete_wrapper = _try_delete_resource

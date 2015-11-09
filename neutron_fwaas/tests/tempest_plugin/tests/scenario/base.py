@@ -20,4 +20,4 @@ from neutron_fwaas.tests.tempest_plugin.tests import fwaas_client
 
 class FWaaSScenarioTest(fwaas_client.FWaaSClientMixin,
                         manager.NetworkScenarioTest):
-    pass
+    _delete_wrapper = delete_wrapper
