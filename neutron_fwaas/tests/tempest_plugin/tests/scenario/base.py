@@ -15,7 +15,7 @@
 
 from tempest.scenario import manager
 
-from neutron_fwaas.tests.tempest_plugin import fwaas_client
+from neutron_fwaas.tests.tempest_plugin.tests import fwaas_client
 
 
 class FWaaSScenarioTest(fwaas_client.FWaaSClientMixin,

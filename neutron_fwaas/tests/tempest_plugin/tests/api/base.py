@@ -15,7 +15,7 @@
 
 from tempest.api.network import base
 
-from neutron_fwaas.tests.tempest_plugin import fwaas_client
+from neutron_fwaas.tests.tempest_plugin.tests import fwaas_client
 
 
 class BaseFWaaSTest(fwaas_client.FWaaSClientMixin, base.BaseNetworkTest):
