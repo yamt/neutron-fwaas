@@ -40,6 +40,18 @@ class FirewallsClient(base.BaseNetworkClient):
         uri = '/fw/firewalls'
         return self.list_resources(uri, **filters)
 
+    def is_resource_deleted(self, id):
+        try:
+            self.show_firewall(id)
+        except lib_exc.NotFound:
+            return True
+        return False
+
+    @property
+    def resource_type(self):
+        """Returns the primary type of resource this client works with."""
+        return 'firewall'
+
 
 class FirewallRulesClient(base.BaseNetworkClient):
 
@@ -64,6 +76,11 @@ class FirewallRulesClient(base.BaseNetworkClient):
     def list_firewall_rules(self, **filters):
         uri = '/fw/firewall_rules'
         return self.list_resources(uri, **filters)
+
+    @property
+    def resource_type(self):
+        """Returns the primary type of resource this client works with."""
+        return 'firewall_rule'
 
 
 class FirewallPoliciesClient(base.BaseNetworkClient):
@@ -108,3 +125,8 @@ class FirewallPoliciesClient(base.BaseNetworkClient):
             'firewall_rule_id': firewall_rule_id,
         }
         return self.update_resource(uri, data)
+
+    @property
+    def resource_type(self):
+        """Returns the primary type of resource this client works with."""
+        return 'firewall_policies'
