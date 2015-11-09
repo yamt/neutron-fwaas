@@ -77,11 +77,6 @@ class FirewallRulesClient(base.BaseNetworkClient):
         uri = '/fw/firewall_rules'
         return self.list_resources(uri, **filters)
 
-    @property
-    def resource_type(self):
-        """Returns the primary type of resource this client works with."""
-        return 'firewall_rule'
-
 
 class FirewallPoliciesClient(base.BaseNetworkClient):
 
@@ -125,8 +120,3 @@ class FirewallPoliciesClient(base.BaseNetworkClient):
             'firewall_rule_id': firewall_rule_id,
         }
         return self.update_resource(uri, data)
-
-    @property
-    def resource_type(self):
-        """Returns the primary type of resource this client works with."""
-        return 'firewall_policies'
