@@ -58,8 +58,11 @@ class FWaaSExtensionTestJSON(base.BaseFWaaSTest):
         if not test.is_extension_enabled('fwaas', 'network'):
             msg = "FWaaS Extension not enabled."
             raise cls.skipException(msg)
-        cls.fw_rule = cls.create_firewall_rule("allow", "tcp")
-        cls.fw_policy = cls.create_firewall_policy()
+
+    def setUp(self):
+        self.fw_rule = self.create_firewall_rule(action="allow",
+                                                 protocol="tcp")
+        self.fw_policy = self.create_firewall_policy()
 
     def _try_delete_policy(self, policy_id):
         # delete policy, if it exists
