@@ -233,7 +233,7 @@ class TestFWaaS(base.FWaaSScenarioTest):
         if self.router_insertion:
             # Specify the router when creating a firewall and ensures that
             # the other router (router2) is not affected by the firewall
-            self._router_ids = [router1['router']['id']]
+            self._router_ids = [router1['id']]
             confirm_allowed2 = self.check_connectivity
             confirm_blocked2 = self.check_connectivity
         else:
